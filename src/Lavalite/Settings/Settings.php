@@ -15,9 +15,9 @@ class Settings
      *
      * @return Response
      */
-    public function display()
+    public function display($view)
     {
-                return view('settings::admin.setting.setting');
+                return view('settings::admin.setting.'.$view);
 
     }
 
