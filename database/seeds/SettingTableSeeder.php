@@ -1,4 +1,8 @@
 <?php
+
+namespace Lavalite\Settings;
+
+use DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,6 +12,20 @@ class SettingTableSeeder extends Seeder
     public function run()
     {
         DB::table('settings')->insert(array(
+            // Uncomment  and edit this section for entering value to setting table.
+            /*
+            array(
+               "id"        => "Id",
+               "user_id"        => "User id",
+               "skey"        => "Skey",
+               "name"        => "Name",
+               "value"        => "Value",
+               "type"        => "Type",
+               "created_at"        => "Created at",
+               "updated_at"        => "Updated at",
+               "deleted_at"        => "Deleted at",
+            ),
+            */
 
         ));
 
@@ -34,11 +52,10 @@ class SettingTableSeeder extends Seeder
             // Uncomment  and edit this section for entering value to settings table.
             /*
             array(
-                'user_id'   => 0,
-                'key'       => 'settings.setting.key',
-                'name'      => 'Some readable name',
-                'value'     => 'initial value which can be edited by the user',
-                'type'      => 'System/Default/User' //
+                'key'      => 'settings.setting.key',
+                'name'     => 'Some name',
+                'value'    => 'Some value',
+                'type'     => 'Default',
             ),
             */
         ));

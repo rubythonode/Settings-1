@@ -13,15 +13,16 @@ class CreateSettingsTable extends Migration {
          public function up()
          {
 
-	    /**
-	     * Table: pages
-	     */
-	       Schema::create('settings', function($table) {
+            /**
+             * Table: settings
+             */
+            Schema::create('settings', function($table) {
                 $table->increments('id')->unsigned();
-                $table->string('name', 50)->nullable();
-                $table->string('slug', 50)->nullable();
-                $table->integer('order')->nullable();
-                $table->boolean('status')->default("1");
+                $table->string('user_id')->nullable();
+                $table->string('skey')->nullable();
+                $table->string('name')->nullable();
+                $table->string('value')->nullable();
+                $table->enum('type',['System','Default','User'])->nullable();
                 $table->string('upload_folder', 100)->nullable();
                 $table->softDeletes();
                 $table->nullableTimestamps();
@@ -35,7 +36,7 @@ class CreateSettingsTable extends Migration {
          */
          public function down()
          {
-	            Schema::drop('settings');
+                Schema::drop('settings');
          }
 
 }
