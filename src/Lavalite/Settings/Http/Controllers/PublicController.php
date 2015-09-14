@@ -13,7 +13,7 @@ class PublicController extends CMSPublicController
      *
      * @return type
      */
-    public function __construct(\Lavalite\Settings\Interfaces\SettingRepositiryInterface $setting)
+    public function __construct(\Lavalite\Settings\Interfaces\SettingRepositoryInterface $setting)
     {
         $this->model = $setting;
         parent::__construct();
