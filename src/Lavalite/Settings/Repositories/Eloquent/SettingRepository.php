@@ -7,12 +7,12 @@ use Lavalite\Settings\Interfaces\SettingRepositoryInterface;
 class SettingRepository extends BaseRepository implements SettingRepositoryInterface
 {
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
-    function model()
+    public function model()
     {
-        return "Lavalite\\Settings\\Models\\Setting";
+        return 'Lavalite\\Settings\\Models\\Setting';
     }
 }

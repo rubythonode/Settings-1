@@ -2,25 +2,22 @@
 
 namespace Lavalite\Settings\Http\Controllers;
 
-use Former;
-use Response;
 use App\Http\Controllers\AdminController as AdminController;
-
+use Former;
 use Lavalite\Settings\Http\Requests\SettingRequest;
-
 use Lavalite\Settings\Interfaces\SettingRepositoryInterface;
+use Response;
 
 /**
  *
- * @package Settings
  */
-
 class SettingAdminController extends AdminController
 {
-
     /**
-     * Initialize setting controller
+     * Initialize setting controller.
+     *
      * @param type SettingRepositoryInterface $setting
+     *
      * @return type
      */
     public function __construct(SettingRepositoryInterface $setting)
@@ -44,7 +41,7 @@ class SettingAdminController extends AdminController
     /**
      * Return list of setting as json.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -55,14 +52,14 @@ class SettingAdminController extends AdminController
             $array[$key] = array_only($row, config('package.settings.setting.listfields'));
         }
 
-        return array('data' => $array);
+        return ['data' => $array];
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
      *
      * @return Response
      */
@@ -78,7 +75,8 @@ class SettingAdminController extends AdminController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function create(SettingRequest $request)
@@ -92,7 +90,8 @@ class SettingAdminController extends AdminController
     /**
      * Display the specified resource.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function store(SettingRequest $request)
@@ -107,8 +106,9 @@ class SettingAdminController extends AdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
+     *
      * @return Response
      */
     public function edit(SettingRequest $request, $id)
@@ -123,8 +123,9 @@ class SettingAdminController extends AdminController
     /**
      * Update the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
+     *
      * @return Response
      */
     public function update(SettingRequest $request, $id)
@@ -139,13 +140,15 @@ class SettingAdminController extends AdminController
     /**
      * Remove the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy(SettingRequest $request, $id)
     {
         try {
             $this->model->delete($id);
+
             return Response::json(['message' => 'Setting deleted sucessfully'.$id, 'type' => 'success', 'title' => 'Success'], 201);
         } catch (Exception $e) {
             return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);

@@ -1,6 +1,6 @@
 <?php
-Route::group(array('prefix' =>'admin'), function ()
-{
+
+Route::group(['prefix' => 'admin'], function () {
     Route::get('/settings/setting/list', 'Lavalite\Settings\Http\Controllers\SettingAdminController@lists');
     Route::resource('/settings/setting', 'Lavalite\Settings\Http\Controllers\SettingAdminController');
 });

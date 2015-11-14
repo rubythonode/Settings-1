@@ -4,14 +4,12 @@ namespace Lavalite\Settings;
 
 use DB;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 class SettingTableSeeder extends Seeder
 {
-
     public function run()
     {
-        DB::table('settings')->insert(array(
+        DB::table('settings')->insert([
             // Uncomment  and edit this section for entering value to setting table.
             /*
             array(
@@ -27,28 +25,28 @@ class SettingTableSeeder extends Seeder
             ),
             */
 
-        ));
+        ]);
 
-        DB::table('permissions')->insert(array(
-            array(
-                'name' => 'settings.setting.view',
-                'readable_name' => 'View Setting'
-            ),
-            array(
-                'name' => 'settings.setting.create',
-                'readable_name' => 'Create Setting'
-            ),
-            array(
-                'name' => 'settings.setting.edit',
-                'readable_name' => 'Update Setting'
-            ),
-            array(
-                'name' => 'settings.setting.delete',
-                'readable_name' => 'Delete Setting'
-            )
-        ));
+        DB::table('permissions')->insert([
+            [
+                'name'          => 'settings.setting.view',
+                'readable_name' => 'View Setting',
+            ],
+            [
+                'name'          => 'settings.setting.create',
+                'readable_name' => 'Create Setting',
+            ],
+            [
+                'name'          => 'settings.setting.edit',
+                'readable_name' => 'Update Setting',
+            ],
+            [
+                'name'          => 'settings.setting.delete',
+                'readable_name' => 'Delete Setting',
+            ],
+        ]);
 
-        DB::table('settings')->insert(array(
+        DB::table('settings')->insert([
             // Uncomment  and edit this section for entering value to settings table.
             /*
             array(
@@ -58,6 +56,6 @@ class SettingTableSeeder extends Seeder
                 'type'     => 'Default',
             ),
             */
-        ));
+        ]);
     }
 }
