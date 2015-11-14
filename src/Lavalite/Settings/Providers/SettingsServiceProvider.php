@@ -63,7 +63,7 @@ class SettingsServiceProvider extends ServiceProvider {
      */
     private function publishResources()
     {
-        $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('settings.php')], 'config');
+        $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('package/settings.php')], 'config');
 
        // Merge setting module to settings package config
         $this->mergeConfigFrom(

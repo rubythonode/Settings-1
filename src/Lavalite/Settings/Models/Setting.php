@@ -32,10 +32,10 @@ class Setting extends Model
      */
     public function initialize()
     {
-        $this->fillable             = config('settings.setting.fillable');
-        $this->uploads              = config('settings.setting.uploadable');
-        $this->uploadRootFolder     = config('settings.setting.upload_root_folder');
-        $this->table                = config('settings.setting.table');
+        $this->fillable             = config('package.settings.setting.fillable');
+        $this->uploads              = config('package.settings.setting.uploadable');
+        $this->uploadRootFolder     = config('package.settings.setting.upload_root_folder');
+        $this->table                = config('package.settings.setting.table');
     }
 
     /**

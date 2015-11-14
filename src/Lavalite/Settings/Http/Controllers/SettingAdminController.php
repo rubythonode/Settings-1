@@ -52,7 +52,7 @@ class SettingAdminController extends AdminController
     {
         $array = $this->model->json();
         foreach ($array as $key => $row) {
-            $array[$key] = array_only($row, config('settings.setting.listfields'));
+            $array[$key] = array_only($row, config('package.settings.setting.listfields'));
         }
 
         return array('data' => $array);
