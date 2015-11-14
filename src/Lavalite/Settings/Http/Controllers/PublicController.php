@@ -6,9 +6,9 @@ use App\Http\Controllers\PublicController as CMSPublicController;
 
 class PublicController extends CMSPublicController
 {
-
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param type \Lavalite\Setting\Interfaces\SettingRepositoryInterface $setting
      *
      * @return type
@@ -20,7 +20,7 @@ class PublicController extends CMSPublicController
     }
 
     /**
-     * Show setting's list
+     * Show setting's list.
      *
      * @param string $slug
      *
@@ -34,7 +34,8 @@ class PublicController extends CMSPublicController
     }
 
     /**
-     * Show setting
+     * Show setting.
+     *
      * @param string $slug
      *
      * @return response

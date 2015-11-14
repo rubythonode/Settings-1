@@ -4,8 +4,8 @@ namespace Lavalite\Settings\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class SettingsServiceProvider extends ServiceProvider {
-
+class SettingsServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -26,7 +26,7 @@ class SettingsServiceProvider extends ServiceProvider {
         $this->publishResources();
         $this->publishMigrations();
 
-        include __DIR__ . '/../Http/routes.php';
+        include __DIR__.'/../Http/routes.php';
     }
 
     /**
@@ -53,13 +53,13 @@ class SettingsServiceProvider extends ServiceProvider {
      */
     public function provides()
     {
-        return array('settings');
+        return ['settings'];
     }
 
     /**
      * Publish resources.
      *
-     * @return  void
+     * @return void
      */
     private function publishResources()
     {
@@ -74,13 +74,11 @@ class SettingsServiceProvider extends ServiceProvider {
     /**
      * Publish migration and seeds.
      *
-     * @return  void
+     * @return void
      */
     private function publishMigrations()
     {
         $this->publishes([__DIR__.'/../../../../database/migrations/' => base_path('database/migrations')], 'migrations');
-        $this->publishes([__DIR__.'/../../../../database/seeds/' => base_path('database/seeds')], 'seeds');
+        $this->publishes([__DIR__.'/../../../../database/seeds/'      => base_path('database/seeds')], 'seeds');
     }
-
-
 }
