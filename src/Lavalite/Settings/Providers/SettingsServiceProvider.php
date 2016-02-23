@@ -3,6 +3,7 @@
 namespace Lavalite\Settings\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Lavalite\Settings\Models\Setting;
 
 class SettingsServiceProvider extends ServiceProvider {
 
@@ -24,9 +25,8 @@ class SettingsServiceProvider extends ServiceProvider {
         $this->loadTranslationsFrom(__DIR__.'/../../../../resources/lang', 'settings');
 
         $this->publishResources();
-        $this->publishMigrations();
+     
 
-        include __DIR__ . '/../Http/routes.php';
     }
 
     /**
@@ -41,9 +41,14 @@ class SettingsServiceProvider extends ServiceProvider {
         });
 
         $this->app->bind(
-            'Lavalite\\Settings\\Interfaces\\SettingRepositoryInterface',
-            'Lavalite\\Settings\\Repositories\\Eloquent\\SettingRepository'
+            \Lavalite\Settings\Interfaces\SettingRepositoryInterface::class,
+            \Lavalite\Settings\Repositories\Eloquent\SettingRepository::class
         );
+
+        $this->app->register(\Lavalite\Settings\Providers\AuthServiceProvider::class);
+        $this->app->register(\Lavalite\Settings\Providers\EventServiceProvider::class);
+        $this->app->register(\Lavalite\Settings\Providers\RouteServiceProvider::class);
+       
     }
 
     /**
@@ -51,9 +56,9 @@ class SettingsServiceProvider extends ServiceProvider {
      *
      * @return array
      */
-    public function provides()
+     public function provides()
     {
-        return array('settings');
+        return ['settings'];
     }
 
     /**
@@ -63,24 +68,26 @@ class SettingsServiceProvider extends ServiceProvider {
      */
     private function publishResources()
     {
+          // Publish configuration file
         $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('package/settings.php')], 'config');
 
-       // Merge setting module to settings package config
-        $this->mergeConfigFrom(
-                __DIR__.'/../../../../config/setting.php', 'settings'
-        );
+        // Publish public view
+        $this->publishes([__DIR__.'/../../../../resources/views/public' => base_path('resources/views/vendor/settings/public')], 'view-public');
+
+        // Publish admin view
+        $this->publishes([__DIR__.'/../../../../resources/views/admin' => base_path('resources/views/vendor/settings/admin')], 'view-admin');
+
+        // Publish language files
+        $this->publishes([__DIR__.'/../../../../resources/lang' => base_path('resources/lang/vendor/settings')], 'lang');
+
+        // Publish migrations
+        $this->publishes([__DIR__.'/../../../../database/migrations' => base_path('database/migrations')], 'migrations');
+
+        // Publish seeds
+        $this->publishes([__DIR__.'/../../../../database/seeds' => base_path('database/seeds')], 'seeds');
     }
 
-    /**
-     * Publish migration and seeds.
-     *
-     * @return  void
-     */
-    private function publishMigrations()
-    {
-        $this->publishes([__DIR__.'/../../../../database/migrations/' => base_path('database/migrations')], 'migrations');
-        $this->publishes([__DIR__.'/../../../../database/seeds/' => base_path('database/seeds')], 'seeds');
-    }
+   
 
 
 }

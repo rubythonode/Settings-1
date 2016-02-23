@@ -2,13 +2,12 @@
 
 namespace Lavalite\Settings\Http\Controllers;
 
-use Former;
-use Response;
 use App\Http\Controllers\AdminController as AdminController;
-
-use Lavalite\Settings\Http\Requests\SettingRequest;
-
+use Form;
+use Lavalite\Settings\Http\Requests\SettingAdminRequest;
 use Lavalite\Settings\Interfaces\SettingRepositoryInterface;
+use Lavalite\Settings\Models\Setting;
+
 
 /**
  *
@@ -34,28 +33,21 @@ class SettingAdminController extends AdminController
      *
      * @return Response
      */
-    public function index(SettingRequest $request)
+    public function index(SettingAdminRequest $request)
     {
-        $this->theme->prependTitle(trans('settings::setting.names').' :: ');
+        $settings  = $this->model->setPresenter('\\Lavalite\\Settings\\Repositories\\Presenter\\SettingListPresenter')->paginate(NULL, ['*']);
 
-        return $this->theme->of('settings::admin.setting.index')->render();
-    }
+        $this   ->theme->prependTitle(trans('settings::setting.names').' :: ');
+        $view   = $this->theme->of('settings::admin.setting.index')->render();
 
-    /**
-     * Return list of setting as json.
-     *
-     * @param  Request  $request
-     *
-     * @return Response
-     */
-    public function lists(SettingRequest $request)
-    {
-        $array = $this->model->json();
-        foreach ($array as $key => $row) {
-            $array[$key] = array_only($row, config('package.settings.setting.listfields'));
-        }
-
-        return array('data' => $array);
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Setting']);
+        $this->responseData = $settings['data'];
+        $this->responseMeta = $settings['meta'];
+        $this->responseView = $view;
+        $this->responseRedirect = '';
+        return $this->respond($request);
+        
     }
 
     /**
@@ -66,14 +58,26 @@ class SettingAdminController extends AdminController
      *
      * @return Response
      */
-    public function show(SettingRequest $request, $id)
-    {
-        $setting = $this->model->findOrNew($id);
 
-        Former::populate($setting);
+    public function show(SettingAdminRequest $request, Setting $setting)
+    {  
+        
+        if (!$setting->exists) {
+            $this->responseCode = 404;
+            $this->responseMessage = trans('messages.success.notfound', ['Module' => 'Setting']);
+            $this->responseData = $setting;
+            $this->responseView = view('settings::admin.setting.new');
+            return $this -> respond($request);
+        }
 
-        return view('settings::admin.setting.show', compact('setting'));
+        Form::populate($setting);
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Setting']);
+        $this->responseData = $setting;
+        $this->responseView = view('settings::admin.setting.show', compact('setting'));
+        return $this -> respond($request);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -81,12 +85,20 @@ class SettingAdminController extends AdminController
      * @param  Request  $request
      * @return Response
      */
-    public function create(SettingRequest $request)
-    {
-        $setting = $this->model->findOrNew(0);
-        Former::populate($setting);
 
-        return view('settings::admin.setting.create', compact('setting'));
+    public function create(SettingAdminRequest $request)
+    {
+
+        $setting = $this->model->newInstance([]);
+
+        Form::populate($setting);
+
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Setting']);
+        $this->responseData = $setting;
+        $this->responseView = view('settings::admin.setting.create', compact('setting'));
+        return $this -> respond($request);
+
     }
 
     /**
@@ -95,12 +107,26 @@ class SettingAdminController extends AdminController
      * @param  Request  $request
      * @return Response
      */
-    public function store(SettingRequest $request)
+   
+    public function store(SettingAdminRequest $request)
     {
-        if ($row = $this->model->create($request->all())) {
-            return Response::json(['message' => 'Setting created sucessfully', 'type' => 'success', 'title' => 'Success'], 201);
-        } else {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+        try {
+            $attributes = $request->all();
+            $setting = $this->model->create($attributes);
+
+            $this->responseCode = 201;
+            $this->responseMessage = trans('messages.success.created', ['Module' => 'Setting']);
+            $this->responseData = $setting;
+            $this->responseMeta = '';
+            $this->responseRedirect = trans_url('/admin/settings/setting/'.$setting->getRouteKey());
+            $this->responseView = view('settings::admin.setting.create', compact('setting'));
+
+            return $this -> respond($request);
+
+        } catch (Exception $e) {
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            return $this -> respond($request);
         }
     }
 
@@ -111,13 +137,15 @@ class SettingAdminController extends AdminController
      * @param  int  $id
      * @return Response
      */
-    public function edit(SettingRequest $request, $id)
+    public function edit(SettingAdminRequest $request, Setting $setting)
     {
-        $setting = $this->model->find($id);
+        Form::populate($setting);
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Setting']);
+        $this->responseData = $setting;
+        $this->responseView = view('settings::admin.setting.edit', compact('setting'));
 
-        Former::populate($setting);
-
-        return view('settings::admin.setting.edit', compact('setting'));
+        return $this -> respond($request);
     }
 
     /**
@@ -127,14 +155,31 @@ class SettingAdminController extends AdminController
      * @param  int  $id
      * @return Response
      */
-    public function update(SettingRequest $request, $id)
+    public function update(SettingAdminRequest $request, Setting $setting)
     {
-        if ($row = $this->model->update($request->all(), $id)) {
-            return Response::json(['message' => 'Setting updated sucessfully', 'type' => 'success', 'title' => 'Success'], 201);
-        } else {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+        try {
+
+            $attributes = $request->all();
+
+            $setting->update($attributes);
+
+            $this->responseCode = 204;
+            $this->responseMessage = trans('messages.success.updated', ['Module' => 'Setting']);
+            $this->responseData = $setting;
+            $this->responseRedirect = trans_url('/admin/settings/setting/'.$setting->getRouteKey());
+
+            return $this -> respond($request);
+
+        } catch (Exception $e) {
+
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            $this->responseRedirect = trans_url('/admin/settings/setting/'.$setting->getRouteKey());
+
+            return $this -> respond($request);
         }
     }
+
 
     /**
      * Remove the specified resource.
@@ -142,13 +187,30 @@ class SettingAdminController extends AdminController
      * @param  int  $id
      * @return Response
      */
-    public function destroy(SettingRequest $request, $id)
+    
+    public function destroy(SettingAdminRequest $request, Setting $setting)
     {
+
         try {
-            $this->model->delete($id);
-            return Response::json(['message' => 'Setting deleted sucessfully'.$id, 'type' => 'success', 'title' => 'Success'], 201);
+
+            $t = $setting->delete();
+
+            $this->responseCode = 202;
+            $this->responseMessage = trans('messages.success.deleted', ['Module' => 'Setting']);
+            $this->responseData = $setting;
+            $this->responseMeta = '';
+            $this->responseRedirect = trans_url('/admin/settings/setting/0');
+
+            return $this -> respond($request);
+
         } catch (Exception $e) {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            $this->responseRedirect = trans_url('/admin/settings/setting/'.$setting->getRouteKey());
+
+            return $this -> respond($request);
+
         }
     }
 }

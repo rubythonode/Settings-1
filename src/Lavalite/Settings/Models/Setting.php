@@ -2,48 +2,25 @@
 
 namespace Lavalite\Settings\Models;
 
-use Lavalite\Filer\FilerTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
+use Litepie\Database\Traits\Slugger;
+use Litepie\Database\Model;
+use Litepie\Filer\Traits\Filer;
+use Litepie\Hashids\Traits\Hashids;
+use Litepie\Trans\Traits\Trans;
+use Litepie\Revision\Traits\Revision;
 
 
 class Setting extends Model
 {
-    use FilerTrait;
-    use SoftDeletes;
-
-    protected $dates = ['deleted_at'];
+   use Filer, SoftDeletes, Hashids, Slugger, Trans, Revision;
 
     /**
-     * Initialiaze page modal
+     * Configuartion for the model.
      *
-     * @param $name
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->initialize();
-    }
-
-    /**
-     * Initialize the modal variables.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        $this->fillable             = config('package.settings.setting.fillable');
-        $this->uploads              = config('package.settings.setting.uploadable');
-        $this->uploadRootFolder     = config('package.settings.setting.upload_root_folder');
-        $this->table                = config('package.settings.setting.table');
-    }
-
-    /**
-     * The user that belong to the setting.
-     */
-    public function user(){
-        return $this->belongsTo(config('user.user.model'));
-    }
+     * @var array
+    */
+    protected $config = 'package.settings.setting';
 
 
 }

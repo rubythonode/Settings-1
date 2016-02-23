@@ -1,6 +1,6 @@
 <?php
 
-namespace Lavalite\Setting\Http\Controllers;
+namespace Lavalite\Settings\Http\Controllers;
 
 use App\Http\Controllers\PublicController as CMSPublicController;
 
@@ -26,9 +26,9 @@ class PublicController extends CMSPublicController
      *
      * @return response
      */
-    protected function index($slug)
+    protected function index()
     {
-        $data['setting'] = $this->model->all();
+        $data['settings'] = $this->model->all();
 
         return $this->theme->of('settings::public.setting.index', $data)->render();
     }

@@ -1,9 +1,12 @@
 <?php
-Route::group(array('prefix' =>'admin'), function ()
-{
-    Route::get('/settings/setting/list', 'Lavalite\Settings\Http\Controllers\SettingAdminController@lists');
-    Route::resource('/settings/setting', 'Lavalite\Settings\Http\Controllers\SettingAdminController');
+
+// Admin routes for module
+Route::group(['prefix' => trans_setlocale().'/admin/settings', 'middleware' => ['web', 'auth.role:admin']], function () {
+    Route::resource('setting', 'SettingAdminController');
 });
 
-Route::get('settings', 'Lavalite\Setting\Http\Controllers\PublicController@list');
-Route::get('settings/{slug?}', 'Lavalite\Setting\Http\Controllers\PublicController@details');
+// Public routes for module
+Route::group(['prefix' => trans_setlocale(), 'middleware' => ['web']], function () {
+	Route::get('settings', 'PublicController@index');
+	Route::get('settings/{slug?}', 'PublicController@details');
+});

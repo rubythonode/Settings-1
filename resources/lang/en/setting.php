@@ -27,4 +27,7 @@ return [
     ],
     "name"          => "Setting",
     "names"         => "Settings",
+    'text' => [
+        'preview' => 'Click on the below list for preview',
+    ],
 ];

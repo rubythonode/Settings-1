@@ -25,11 +25,10 @@
 @section('content')
 <table id="main-list" class="table table-striped table-bordered">
     <thead>
-        <th>{!! trans('settings::setting.label.user_id')!!}</th>
-<th>{!! trans('settings::setting.label.skey')!!}</th>
-<th>{!! trans('settings::setting.label.name')!!}</th>
-<th>{!! trans('settings::setting.label.value')!!}</th>
-<th>{!! trans('settings::setting.label.type')!!}</th>
+        <th>{!! trans('settings::setting.label.skey')!!}</th>
+        <th>{!! trans('settings::setting.label.name')!!}</th>
+        <th>{!! trans('settings::setting.label.value')!!}</th>
+        <th>{!! trans('settings::setting.label.type')!!}</th>
     </thead>
 </table>
 @stop
@@ -38,24 +37,27 @@
 
 var oTable;
 $(document).ready(function(){
-    $('#entry-setting').load('{{URL::to('admin/settings/setting/0')}}');
-    oTable = $('#main-list').dataTable( {
-        "ajax": '{{ URL::to('/admin/settings/setting/list') }}',
+    app.load('#entry-setting','{{trans_url('/admin/settings/setting/0')}}');
+    oTable = $('#main-list').dataTable({
+        "ajax": '{{ trans_url('/admin/settings/setting') }}',
         "columns": [
-        { "data": "user_id" },
-{ "data": "skey" },
-{ "data": "name" },
-{ "data": "value" },
-{ "data": "type" },],
+        { "data": "skey" },
+        { "data": "name" },
+        { "data": "value" },
+        { "data": "type" },],
         "settingLength": 50
     });
 
     $('#main-list tbody').on( 'click', 'tr', function () {
-        $(this).toggleClass('selected');
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        } else {
+            oTable.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
 
         var d = $('#main-list').DataTable().row( this ).data();
-
-        $('#entry-setting').load('{{URL::to('admin/settings/setting')}}' + '/' + d.id);
+        app.load('#entry-setting', '{{trans_url('/admin/settings/setting')}}' + '/' + d.id);
 
     });
 });
