@@ -1,6 +1,5 @@
 <?php
-
-return [
+return array(
 
     /*
     |--------------------------------------------------------------------------
@@ -12,6 +11,6 @@ return [
     |
     */
 
-    'name'          => 'Settings',
-    'names'         => 'Settings',
-];
+    "name"          => "Settings",
+    "names"         => "Settings",
+);
