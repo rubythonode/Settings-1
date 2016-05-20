@@ -2,44 +2,42 @@
 
 namespace Lavalite\Settings\Http\Requests;
 
-use App\Http\Requests\Request;
-use User;
+use App\Http\Requests\Request as FormRequest;
+use Illuminate\Http\Request;
 
-class SettingAdminRequest extends Request
+class SettingAdminWebRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(\Illuminate\Http\Request $request)
+    public function authorize(Request $request)
     {
-        $setting = $this->route('settings');
+        $setting = $this->route('setting');
 
-// Determine if the user is authorized to access setting module,
         if (is_null($setting)) {
+            // Determine if the user is authorized to access setting module,
             return $request->user('admin.web')->canDo('settings.setting.view');
         }
 
-// Determine if the user is authorized to create an entry,
         if ($request->isMethod('POST') || $request->is('*/create')) {
-
-            return $request->user('admin.web')->allows('create', $setting);
+            // Determine if the user is authorized to create an entry,
+            return $request->user('admin.web')->can('create', $setting);
         }
 
-// Determine if the user is authorized to update an entry,
         if ($request->isMethod('PUT') || $request->isMethod('PATCH') || $request->is('*/edit')) {
-            return $request->user('admin.web')->allows('update', $setting);
+            // Determine if the user is authorized to update an entry,
+            return $request->user('admin.web')->can('update', $setting);
         }
 
-// Determine if the user is authorized to delete an entry,
         if ($request->isMethod('DELETE')) {
-            return $request->user('admin.web')->allows('delete', $setting);
+            // Determine if the user is authorized to delete an entry,
+            return $request->user('admin.web')->can('delete', $setting);
         }
 
         // Determine if the user is authorized to view the module.
-        return $request->user('admin.web')->allows('view', $setting);
+        return $request->user('admin.web')->can('view', $setting);
 
     }
 
@@ -48,18 +46,18 @@ class SettingAdminRequest extends Request
      *
      * @return array
      */
-    public function rules(\Illuminate\Http\Request $request)
+    public function rules(Request $request)
     {
 
-// validation rule for create request.
         if ($request->isMethod('POST')) {
+            // validation rule for create request.
             return [
                 'name' => 'required',
             ];
         }
 
-// Validation rule for update request.
         if ($request->isMethod('PUT') || $request->isMethod('PATCH')) {
+            // Validation rule for update request.
             return [
                 'name' => 'required',
             ];
@@ -69,7 +67,6 @@ class SettingAdminRequest extends Request
         return [
 
         ];
-
     }
 
 }

@@ -3,7 +3,7 @@
 namespace Lavalite\Settings\Repositories\Eloquent;
 
 use Lavalite\Settings\Interfaces\SettingRepositoryInterface;
-use Litepie\Database\Eloquent\BaseRepository;
+use Litepie\Repository\Eloquent\BaseRepository;
 
 class SettingRepository extends BaseRepository implements SettingRepositoryInterface
 {
@@ -12,15 +12,14 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
      *
      * @return string
      */
-    function model()
+    public function model()
     {
-         return config('package.settings.setting.model');
+        return config('package.settings.setting.model');
     }
 
-    public function getValue($key,$user_id)
+    public function getValue($key, $user_id)
     {
-    	return $this->model->whereUserId($user_id)->whereSkey($key)->first();
+        return $this->model->whereUserId($user_id)->whereSkey($key)->first();
     }
 
-    
 }
