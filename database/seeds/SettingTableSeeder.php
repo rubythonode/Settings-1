@@ -1,8 +1,5 @@
 <?php
 
-namespace Lavalite\Settings;
-
-use DB;
 use Illuminate\Database\Seeder;
 
 class SettingTableSeeder extends Seeder
@@ -29,20 +26,20 @@ class SettingTableSeeder extends Seeder
 
         DB::table('permissions')->insert([
             [
-                'name'          => 'settings.setting.view',
-                'readable_name' => 'View Setting',
+                'slug'          => 'settings.setting.view',
+                'name'          => 'View Setting',
             ],
             [
-                'name'          => 'settings.setting.create',
-                'readable_name' => 'Create Setting',
+                'slug'          => 'settings.setting.create',
+                'name'          => 'Create Setting',
             ],
             [
-                'name'          => 'settings.setting.edit',
-                'readable_name' => 'Update Setting',
+                'slug'          => 'settings.setting.edit',
+                'name'          => 'Update Setting',
             ],
             [
-                'name'          => 'settings.setting.delete',
-                'readable_name' => 'Delete Setting',
+                'slug'          => 'settings.setting.delete',
+                'name'          => 'Delete Setting',
             ],
         ]);
 
